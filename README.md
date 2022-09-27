@@ -3,7 +3,7 @@ A flexible JavaScript-based soft-timer for oTree that can span multiple pages an
 
 Author: Faith Bague-Sampson
 
-The folder otree_soft_timer_app contains a working, 10-round oTree app demonstrating both a multi-page and a per-page timer.
+The folder otree_soft_timer_app contains the files for a 10-round oTree app demonstrating both a multi-page and a per-page timer.
 The two script files contain just the javascript used for the timer.
 
 Feature overview:
