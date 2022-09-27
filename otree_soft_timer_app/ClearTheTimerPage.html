@@ -1,0 +1,50 @@
+
+{{ block title }}
+Clearing the sessionStorage Items from the Browser
+{{ endblock }}
+
+{{ block content }}
+
+<div>
+    <p style="color: blue; font-weight:bold;">
+        The script on this page clears the browser's sessionStorage objects.
+    </p>
+    <p>
+        JavaScript code for removing the sessionStorage items is included in this page's HTML template. 
+        The generalized code is:
+        <br /><span style="font-family: monospace; font-size:11pt;"> sessionStorage.removeItem('NAME_OF_SAVED_ITEM'); </span>
+    </p>
+    <p>
+        <strong>It is recommended that the sessionStorage objects be removed once the participants are finished with 
+        each timer method.</strong> This is most reliably performed on the next un-timed page and not as a JavaScript 
+        unload event. 
+    </p>
+    <p>
+        Even though this example includes two differently behaved timers working back-to-back without the first one being formally 
+        cleared from the browser before the second timer is invoked, it is generally wiser to clear one timer before beginning the
+        next timer. If you must immediately follow one timeout rule with a different timeout rule, it is advisable that each timer 
+        employs its own distinct name for the sessionStorage objects <span style="font-family: monospace; font-size:11pt;">'timeLeftOver'</span> 
+        (the running countdown timer itself) and <span style="font-family: monospace; font-size:11pt;">'clockLeftOver'</span> 
+        (the time-unit display associated with the remaining time). To do so, choose one of the pages/sections to adjust, then run 
+        a find-and-replace for the names of the sessionStorage objects to be used during that part of the experiment.
+    </p>
+</div>
+
+{{ next_button }}
+
+{{ endblock }}
+
+
+{{ block scripts }}
+<script> /* ==== Remove the timer content from sessionStorage ==== */
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        sessionStorage.removeItem('roundNumber');
+        sessionStorage.removeItem('timeLeftOver');
+        sessionStorage.removeItem('clockLeftOver');
+    });
+
+</script>
+{{ endblock }}
+
+

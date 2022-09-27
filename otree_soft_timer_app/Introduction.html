@@ -1,0 +1,53 @@
+
+{{ block title }}
+A Flexible JavaScript-based Soft-timer for oTree
+{{ endblock }}
+
+{{ block content }}
+<div>
+    <p style="color: blue; font-weight:bold;">
+        This app demonstrates the use of a JavaScript-based soft-timer for oTree. 
+    </p>
+    <p>
+        The first section of this app demonstrates a {{ C.time_on_multispan_task }}-second timer that spans multiple pages. 
+        The second section demonstrates a {{ C.time_on_per_page_task }}-second, per-question timer. Code for clearing the 
+        browser's sessionStorage is provided on the final page.
+    </p>
+    <strong>Feature overview:</strong>
+    <ul>
+        <li>Each page/submit can have its own timer or the timer can span multiple pages</li>
+        <li>The soft-timer does NOT reset on page refresh</li>
+        <li>Each subsection/page class of an experiment can have its own timer</li>
+        <li>Timer can be set for hours, minutes, or just seconds; its display adjusts accordingly</li>
+        <li>Two different (and entirely optional) user-notification methods</li>
+        <li>Primary features are controlled in the <span style="font-family: monospace; font-size:11pt;">__init__.py</span>; 
+            look-and-feel settings are adjusted in the [on-page] stylesheet</li>
+    </ul>
+    <p><strong>How it works:</strong><br />
+        The soft timer works by storing the time remaining in the browser's "sessionStorage."  
+        To see what is being recorded by the browser, press 
+        <span style="font-family: monospace; font-size:11pt;">Ctrl + Shift + i</span>, then navigate to the "Storage"
+        tab/section of the inspector, and find "Session Storage." Please note that this 
+        approach to a <strong>soft-timer has NOT been tested for use with MTurk</strong>, 
+        where experimenter control over the local machine is non-existent.
+    </p>
+    <p><strong>User notification of time expiration:</strong><br />
+        Optionally, users can be shown an on-page message that appears upon the timer's expiration, then persists until 
+        the timer is next reset. Additionally (or alternatively), subjects can receive a one-time pop-up alert notifying 
+        them the instant that the timeout happens. Once acknowledged (the user clicks "Ok"), the pop-up message will not 
+        reappear until the timer is reset. The behavior of each timer's timeout messages is set in the 
+        <span style="font-family: monospace; font-size:11pt;">class MyPage(Page)</span> of your app's 
+        <span style="font-family: monospace; font-size:11pt;">__init__.py</span> file.
+    </p>
+
+
+</div>
+
+{{ next_button }}
+
+{{ endblock }}
+
+
+
+
+

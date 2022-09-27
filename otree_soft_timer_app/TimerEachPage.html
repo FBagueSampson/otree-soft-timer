@@ -1,0 +1,176 @@
+{{ block styles }}
+    <style>
+        .softTimeOut { /* Sets styles for the expired countdown clock */
+            color: red ;
+            font-weight: bold ;
+        }
+
+        #alertmessage { /* Sets styles for the alert message on the page */
+            color: red ;
+            font-weight: bold ;
+            text-align:center;
+        }
+
+        /* #CountdownClock {
+            /* styles for the running countdown timer are set here 
+        } */
+    </style>
+{{ endblock }}
+
+{{ block title }}
+    A Soft-timer for Each Page
+{{ endblock }}
+
+{{ block content }}
+    <div style="float: right;">
+        <table style="border: none;" width="200px">
+            <tr>
+                <td style="border: none;" width="120px">Time remaining:</td>
+                <td style="border: none;" width="80px"><span id="CountdownClock"></span></td> <!-- Where countdown is displayed -->
+            </tr>
+        </table>
+    </div>
+    <span style="display:none;" id="timer"></span> <!-- NECESSARY for "ticking" to function -->
+        
+    <p id="alertmessage"></p> <!-- Optional on-page message once time expires -->
+
+    <!-- Rest of the content for the page -->
+    <div>
+        <p style="color: blue; font-weight:bold;">
+            You have {{ C.time_on_per_page_task }} seconds to complete each page of the next {{ rounds_left_in_task }} 
+            more rounds.
+        </p>
+        <p style="color: blue; ">
+            This task has both an on-page alert message and a pop-up alert message.
+        </p>
+        <p>
+            The styles for the on-page post-timer-expiration message (<span style="font-family: monospace; font-size:11pt;">#alertmessage</span>) 
+            and the post-timer-expiration clock display (<span style="font-family: monospace; font-size:11pt;">.softTimeOut</span>) 
+            are controlled by a page-level embedded style sheet. These styles. and any adjustments made to them, are automatically 
+            applied to the HTML elements by the JavaScript, so any changes to the naming convention(s) must be reflected in both 
+            the HTML/CSS and the JavaScript.
+        </p>
+        <p>
+            The total time originally alloted by <span style="font-family: monospace; font-size:11pt;">js_vars.time_on_task</span> 
+            determines which time-units will be displayed. Countdowns for longer than an hour will have two placeholders for hour, 
+            two for minutes, and two for seconds (e.g., a 2.5-hour timer will start its display at 02:30:00). 
+            Countdowns for time intervals under an hour will have two placeholders for minutes and two for seconds 
+            (e.g., a 5-minute timer would show 05:00 at the start). If the timer is for less than a minute, there will be 
+            one placeholder for minutes and two for seconds (e.g., a 40-second timer would display 0:40 at the start). 
+            Display settings can be adjusted in the JavaScript.
+        </p>
+    </div>
+
+    {{ formfields }}
+
+    {{ next_button }}
+
+{{ endblock }}
+
+
+{{ block scripts }}
+<script> /*  ==== Soft-timer Script ==== */
+
+    const popup_AlertText = js_vars.popup_AlertText;
+    var start_time, countAmt, interval;
+    var tickingTimer = document.getElementById("CountdownClock");
+    var timeOverMsg = document.getElementById("alertmessage"); 
+
+    function addZero(obj) {
+        if (obj < 10) {obj = "0" + obj}
+        return obj;
+    }
+
+    function makeitBaseSixty(remainingTime) {
+        var hoursLeft = Math.floor(remainingTime/3600);
+        var minutesLeft = Math.floor((remainingTime - hoursLeft*3600)/60);
+        var secondsLeft = remainingTime - Math.floor(remainingTime/60)*60;
+        let h = addZero(hoursLeft);
+        let m = addZero(minutesLeft);
+        let s = addZero(secondsLeft);
+        return {h, m, s};
+    }
+
+    function now() {
+        return ((new Date()).getTime());
+    }
+    
+    function tick() {
+        var elapsed = now() - start_time;
+        var cnt = countAmt - elapsed;
+        let timeLeftOver = Math.round(cnt / 1000);
+        let displayClock = makeitBaseSixty(timeLeftOver);
+        sessionStorage.setItem('timeLeftOver', timeLeftOver);
+        if (cnt > 0) {
+            if (js_vars.time_on_task > 3599) {
+                tickingTimer.innerHTML = displayClock.h + ":" + displayClock.m + ":" + displayClock.s;
+            } else if (js_vars.time_on_task < 3600 && js_vars.time_on_task > 59) {
+                tickingTimer.innerHTML = displayClock.m + ":" + displayClock.s;
+            } else {
+                tickingTimer.innerHTML = 0 + ":" + displayClock.s;
+            }
+        } else {
+            if (js_vars.time_on_task > 3599) {
+                tickingTimer.innerHTML = "00:00:00";
+            } else if (js_vars.time_on_task < 3600 && js_vars.time_on_task > 59) {
+                tickingTimer.innerHTML = "00:00";
+            } else {tickingTimer.innerHTML = "0:00";}
+            tickingTimer.classList.add('softTimeOut');
+            if (js_vars.onpage_hasAlert == 'True'){
+                timeOverMsg.innerHTML = js_vars.onpage_AlertText; // on-page message
+            }
+            if (js_vars.popup_hasAlert == 'True'){
+                alert(popup_AlertText); // popup message
+            }
+            clearInterval(interval);
+        }
+        sessionStorage.setItem('clockLeftOver', tickingTimer.innerHTML);
+    }
+        
+    function startTimer(secs) {
+        clearInterval(interval);
+        if (js_vars.time_on_task > 59) {
+            document.getElementById("timer").innerHTML = secs; // NECESSARY for "ticking" to function
+        } else {
+            document.getElementById("CountdownClock").innerHTML = 0 + ":" + addZero(secs);
+        }
+        countAmt = secs * 1000;
+        start_time = now();
+        interval = setInterval(tick, 1000);
+    }
+   
+    document.addEventListener('DOMContentLoaded', (event) => {
+        if (!sessionStorage.getItem('roundNumber')) { 
+            sessionStorage.setItem('roundNumber', js_vars.round_number);
+            sessionStorage.setItem('timeLeftOver', js_vars.time_on_task);
+            sessionStorage.removeItem('clockLeftOver');
+            startTimer(js_vars.time_on_task); 
+        } else if (js_vars.time_is_per_page == 'True' && sessionStorage.getItem('roundNumber') < js_vars.round_number) {
+            sessionStorage.setItem('roundNumber', js_vars.round_number);
+            sessionStorage.setItem('timeLeftOver', js_vars.time_on_task);
+            sessionStorage.removeItem('clockLeftOver');
+            startTimer(js_vars.time_on_task); 
+        } else {
+            let newTime = sessionStorage.getItem('timeLeftOver');
+            let oldClock = sessionStorage.getItem('clockLeftOver');
+            if (newTime <= 0) {
+                if (js_vars.time_on_task > 3599) {
+                    tickingTimer.innerHTML = "00:00:00";
+                } else if (js_vars.time_on_task < 3600 && js_vars.time_on_task > 59) {
+                    tickingTimer.innerHTML = "00:00";
+                } else {tickingTimer.innerHTML = "0:00";}
+                tickingTimer.classList.add('softTimeOut');
+                if (js_vars.onpage_hasAlert == 'True'){
+                    timeOverMsg.innerHTML = js_vars.onpage_AlertText; 
+                }
+            } else {
+                tickingTimer.innerHTML = oldClock;
+                startTimer(newTime);
+            }
+        }
+    });
+   
+</script>
+{{ endblock }}
+
+
