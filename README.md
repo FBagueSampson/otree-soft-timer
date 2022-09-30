@@ -12,5 +12,5 @@ Feature overview:
 * Each subsection/page class of an experiment can have its own timer
 * Timer can be set for hours, minutes, or just seconds; its display adjusts accordingly
 * Two different (and entirely optional) user-notification methods
-* Primary features are controlled in the __init__.py; look-and-feel settings are adjusted via stylesheet (included at the page here)
+* Primary features are controlled in the __init__.py; look-and-feel settings are adjusted via stylesheet (included at the page-level here)
         
