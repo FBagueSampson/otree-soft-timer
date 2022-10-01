@@ -8,7 +8,7 @@ Author: Faith Bague-Sampson; September 2022
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'soft_timer_many_rounds'
+    NAME_IN_URL = 'configurable_soft_timer'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 10
     time_on_multispan_task = 90 # time in number of seconds: 1.5 minutes * 60 seconds per minute = 90 seconds
