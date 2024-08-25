@@ -1,7 +1,10 @@
 # otree-soft-timer
+
+Citation: Faith Bague-Sampson. 2022. *Soft Timer for oTree*. [Date pulled from source] [Link to source]
+
 A flexible JavaScript-based soft-timer for oTree that can span multiple pages and that does NOT reset on page refresh.
 
-Author: Faith Bague-Sampson
+Author: Faith Bague-Sampson, 2022
 
 The folder otree_soft_timer_app contains the files for a 10-round oTree app demonstrating both a multi-page and a per-page timer.
 The two script files contain just the javascript used for the timer.
