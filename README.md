@@ -6,6 +6,8 @@ A flexible JavaScript-based soft-timer for oTree that can span multiple pages an
 
 Author: Faith Bague-Sampson, 2022
 
+You can demo the app <a href="https://otree-apps-to-share-c9406de23875.herokuapp.com/" target="_blank">here</a> (select the "configurable_soft_timer").
+
 The folder otree_soft_timer_app contains the files for a 10-round oTree app demonstrating both a multi-page and a per-page timer.
 The two script files contain just the javascript used for the timer.
 
